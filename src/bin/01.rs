@@ -1,5 +1,7 @@
 advent_of_code::solution!(1);
 
+use cond::cond;
+
 pub fn part_one(input: &str) -> Option<u32> {
     let sum = input
         .lines()
@@ -15,19 +17,44 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(sum)
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
-    let new_input = input
-        .replace("one", "one1one")
-        .replace("two", "two2two")
-        .replace("three", "three3three")
-        .replace("four", "four4four")
-        .replace("five", "five5five")
-        .replace("six", "six6six")
-        .replace("seven", "seven7seven")
-        .replace("eight", "eight8eight")
-        .replace("nine", "nine9nine");
+fn find_number(input: &str) -> Option<u32> {
+    if let Some(number) = input.get(0..1).and_then(|c| c.parse::<u32>().ok()) {
+        return Some(number);
+    }
 
-    part_one(&new_input)
+    let length = input.len();
+
+    let number = cond! {
+        length >= 3 && &input[0..3] == "one" => 1,
+        length >= 3 && &input[0..3] == "two" => 2,
+        length >= 5 && &input[0..5] == "three" => 3,
+        length >= 4 && &input[0..4] == "four" => 4,
+        length >= 4 && &input[0..4] == "five" => 5,
+        length >= 3 && &input[0..3] == "six" => 6,
+        length >= 5 && &input[0..5] == "seven" => 7,
+        length >= 5 && &input[0..5] == "eight" => 8,
+        length >= 4 && &input[0..4] == "nine" => 9,
+        _ => {
+            None?
+        },
+    };
+
+    Some(number)
+}
+
+pub fn part_two(input: &str) -> Option<u32> {
+    let sum = input
+        .lines()
+        .filter(|l| !l.is_empty())
+        .map(|line| {
+            (0..line.len())
+                .filter_map(|idx| find_number(&line[idx..]))
+                .collect::<Vec<u32>>()
+        })
+        .map(|vec| 10 * vec.first().unwrap() + vec.last().unwrap())
+        .sum();
+
+    Some(sum)
 }
 
 #[cfg(test)]

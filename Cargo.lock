@@ -6,6 +6,7 @@ version = 3
 name = "advent_of_code"
 version = "0.9.2"
 dependencies = [
+ "cond",
  "pico-args",
  "pretty_assertions",
  "regex",
@@ -32,6 +33,12 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "cond"
+version = "1.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3fbf18fe4da61148465a3a7d7d853a102c85b6959d2a5deae7d7a384687fe64d"
 
 [[package]]
 name = "diff"
