@@ -18,22 +18,23 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 fn find_number(input: &str) -> Option<u32> {
-    if let Some(number) = input.get(0..1).and_then(|c| c.parse::<u32>().ok()) {
+    if let Ok(number) = input.get(0..1)?.parse::<u32>() {
         return Some(number);
     }
 
-    let length = input.len();
-
     let number = cond! {
-        length >= 3 && &input[0..3] == "one" => 1,
-        length >= 3 && &input[0..3] == "two" => 2,
-        length >= 5 && &input[0..5] == "three" => 3,
-        length >= 4 && &input[0..4] == "four" => 4,
-        length >= 4 && &input[0..4] == "five" => 5,
-        length >= 3 && &input[0..3] == "six" => 6,
-        length >= 5 && &input[0..5] == "seven" => 7,
-        length >= 5 && &input[0..5] == "eight" => 8,
-        length >= 4 && &input[0..4] == "nine" => 9,
+        input.get(0..3)? == "one" => 1,
+        input.get(0..3)? == "two" => 2,
+        input.get(0..3)? == "six" => 6,
+
+        input.get(0..4)? == "four" => 4,
+        input.get(0..4)? == "five" => 5,
+        input.get(0..4)? == "nine" => 9,
+
+        input.get(0..5)? == "three" => 3,
+        input.get(0..5)? == "seven" => 7,
+        input.get(0..5)? == "eight" => 8,
+
         _ => {
             None?
         },
