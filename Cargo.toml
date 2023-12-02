@@ -18,6 +18,7 @@ test_lib = []
 
 [dependencies]
 cond = "1.0.5"
+lazy_static = "1.4.0"
 pico-args = "0.5.0"
 pretty_assertions = "1.4.0"
 regex = "1.10.2"

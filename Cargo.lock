@@ -7,6 +7,7 @@ name = "advent_of_code"
 version = "0.9.2"
 dependencies = [
  "cond",
+ "lazy_static",
  "pico-args",
  "pretty_assertions",
  "regex",
@@ -146,6 +147,12 @@ name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
+
+[[package]]
+name = "lazy_static"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "memchr"
