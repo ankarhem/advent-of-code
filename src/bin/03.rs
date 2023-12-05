@@ -79,10 +79,6 @@ pub fn part_one(input: &str) -> Option<u32> {
 /// --- Part Two ---
 
 fn get_number(line: &str, from: usize) -> Option<u32> {
-    if from >= line.len() || from <= 0 {
-        return None;
-    }
-
     let numbers_to_end = line[from..]
         .chars()
         .take_while(|c| c.is_ascii_digit())
