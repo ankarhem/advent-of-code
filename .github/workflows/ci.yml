@@ -26,6 +26,8 @@ jobs:
             - name: cargo test
               run: cargo test
             # uncomment to enable clippy linter
+            - name: Add clippy to nightly
+              run: rustup component add clippy --toolchain nightly-x86_64-unknown-linux-gnu
             - name: cargo clippy
               run: cargo clippy -- -D warnings
             # uncomment to enable format linter
