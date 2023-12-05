@@ -2,24 +2,32 @@ advent_of_code::solution!(4);
 
 use std::cmp;
 
+fn to_winning_cards(line: &str) -> u32 {
+    let mut parts = line.split('|');
+    let winners = parts
+        .next()
+        .expect("line to have a |")
+        .split_whitespace()
+        .filter_map(|s| s.parse::<u32>().ok())
+        .collect::<Vec<_>>();
+
+    let wins = parts
+        .next()
+        .expect("line to have a |")
+        .split_whitespace()
+        .filter_map(|s| s.parse::<u32>().ok())
+        .filter(|n| winners.contains(n))
+        .count();
+
+    wins as u32
+}
+
 pub fn part_one(input: &str) -> Option<u32> {
     let points = input
         .lines()
         .filter(|l| !l.is_empty())
         .filter_map(|line| {
-            let mut parts = line.split('|');
-            let winners = parts
-                .next()?
-                .split_whitespace()
-                .filter_map(|s| s.parse::<u32>().ok())
-                .collect::<Vec<_>>();
-
-            let winning_cards = parts
-                .next()?
-                .split_whitespace()
-                .filter_map(|s| s.parse::<u32>().ok())
-                .filter(|n| winners.contains(n))
-                .count();
+            let winning_cards = to_winning_cards(line);
 
             if winning_cards == 0 {
                 None
@@ -35,8 +43,21 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(points)
 }
 
-pub fn part_two(_input: &str) -> Option<u32> {
-    None
+pub fn part_two(input: &str) -> Option<u32> {
+    let lines = input.lines().filter(|l| !l.is_empty()).rev();
+    let mut recursive_worth: Vec<u32> = vec![];
+
+    for line in lines {
+        let wins = to_winning_cards(line);
+        let worth = 1 + recursive_worth
+            .iter()
+            .rev()
+            .take(wins as usize)
+            .sum::<u32>();
+        recursive_worth.push(worth);
+    }
+
+    Some(recursive_worth.iter().sum())
 }
 
 #[cfg(test)]
@@ -60,12 +81,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result.unwrap(), 13);
+        assert_eq!(13, result.unwrap());
     }
 
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(30, result.unwrap());
     }
 }
