@@ -6,7 +6,8 @@ fn has_symbols(input: &str) -> bool {
     !input
         .chars()
         .filter(|c| !c.is_ascii_digit() && *c != '.')
-        .collect::<Vec<_>>().is_empty()
+        .collect::<Vec<_>>()
+        .is_empty()
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
