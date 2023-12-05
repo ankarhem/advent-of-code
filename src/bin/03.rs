@@ -3,12 +3,10 @@
 advent_of_code::solution!(3);
 
 fn has_symbols(input: &str) -> bool {
-    input
+    !input
         .chars()
-        .filter(|c| !c.is_digit(10) && *c != '.')
-        .collect::<Vec<_>>()
-        .len()
-        > 0
+        .filter(|c| !c.is_ascii_digit() && *c != '.')
+        .collect::<Vec<_>>().is_empty()
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
@@ -36,7 +34,7 @@ pub fn part_one(input: &str) -> Option<u32> {
             // If it does, add the current number to the list of numbers
 
             curr.chars().enumerate().for_each(|(index, c)| {
-                if c.is_digit(10) {
+                if c.is_ascii_digit() {
                     if number.is_none() {
                         start = match index {
                             0 => Some(0),
@@ -47,19 +45,17 @@ pub fn part_one(input: &str) -> Option<u32> {
                         Some(n) => n * 10 + c.to_digit(10).unwrap(),
                         None => c.to_digit(10).unwrap(),
                     });
-                } else {
-                    if let Some(curr_num) = number {
-                        let s = start.expect("start should be set");
+                } else if let Some(curr_num) = number {
+                    let s = start.expect("start should be set");
 
-                        if has_symbols(&curr[s..=index])
-                            || has_symbols(&prev[s..=index])
-                            || has_symbols(&next[s..=index])
-                        {
-                            numbers.push(curr_num);
-                        }
-                        number = None;
-                        start = None;
+                    if has_symbols(&curr[s..=index])
+                        || has_symbols(&prev[s..=index])
+                        || has_symbols(&next[s..=index])
+                    {
+                        numbers.push(curr_num);
                     }
+                    number = None;
+                    start = None;
                 }
             });
 
@@ -89,13 +85,13 @@ fn get_number(line: &str, from: usize) -> Option<u32> {
 
     let numbers_to_end = line[from..]
         .chars()
-        .take_while(|c| c.is_digit(10))
+        .take_while(|c| c.is_ascii_digit())
         .collect::<String>();
 
     let numbers_to_start = line[..=from]
         .chars()
         .rev()
-        .take_while(|c| c.is_digit(10))
+        .take_while(|c| c.is_ascii_digit())
         .skip(1)
         .collect::<String>()
         .chars()
@@ -156,7 +152,7 @@ pub fn part_two(input: &str) -> Option<u32> {
                         return None;
                     }
 
-                    return Some(all_numbers[0] * all_numbers[1]);
+                    Some(all_numbers[0] * all_numbers[1])
                 })
                 .collect();
 
