@@ -1,3 +1,4 @@
+#![feature(iter_map_windows)]
 advent_of_code::solution!(3);
 
 fn has_symbols(input: &str) -> bool {
