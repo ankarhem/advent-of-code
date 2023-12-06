@@ -15,22 +15,20 @@ struct Game {
 }
 
 pub fn part_one(input: &str) -> Option<u64> {
-    let lines = input
-        .lines()
-        .filter(|l| !l.is_empty())
-        .map(|l| {
-            l.split_whitespace()
-                .filter_map(|s| s.parse::<u64>().ok())
-                .collect::<Vec<u64>>()
-        })
-        .collect::<Vec<Vec<u64>>>();
-    let games = lines.chunks(2).flat_map(|chunks| {
-        let times = &chunks[0];
-        let distances = &chunks[1];
-        times.iter().enumerate().map(|(index, time)| Game {
-            duration: *time,
-            record_distance: distances[index],
-        })
+    let mut lines = input.lines().filter(|l| !l.is_empty());
+    let times = lines
+        .next()?
+        .split_whitespace()
+        .filter_map(|s| s.parse::<u64>().ok());
+
+    let distances = lines
+        .next()?
+        .split_whitespace()
+        .filter_map(|s| s.parse::<u64>().ok());
+
+    let games = times.zip(distances).map(|(time, distance)| Game {
+        duration: time,
+        record_distance: distance,
     });
 
     let margin_of_err = games
