@@ -1,21 +1,17 @@
 #![feature(iter_map_windows)]
 advent_of_code::solution!(5);
 
-use rayon::prelude::*;
-
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 struct Seed(u64);
 
-impl Seed {
-    fn advance(&mut self, maps: &Vec<CategoryMap>) {
-        for map in maps {
-            if self.0 >= map.source_start && self.0 < map.source_start + map.length {
-                let diff: i64 = self.0 as i64 - map.source_start as i64;
-                self.0 = (map.dest_start as i64 + diff) as u64;
-                // to prevent double-mapping
-                break;
-            }
-        }
+fn advance_seed(seed: &mut u64, maps: &Vec<CategoryMap>) {
+    let map = maps
+        .iter()
+        .find(|m| return *seed >= m.source_start && *seed < m.source_start + m.length);
+
+    if let Some(map) = map {
+        let diff: i64 = *seed as i64 - map.source_start as i64;
+        *seed = (map.dest_start as i64 + diff) as u64;
     }
 }
 
@@ -45,47 +41,45 @@ pub fn part_one(input: &str) -> Option<u64> {
         .next()?
         .split_whitespace()
         .filter_map(|s| s.parse::<u64>().ok())
-        .map(|s| Seed(s))
         .collect::<Vec<_>>();
 
     let map_sections: Vec<Vec<CategoryMap>> =
         sections.map(|section| to_category_map(section)).collect();
 
     for map in map_sections {
-        for seed in seeds.iter_mut() {
-            seed.advance(&map);
-        }
+        seeds.iter_mut().for_each(|seed| advance_seed(seed, &map));
     }
 
-    Some(seeds.into_par_iter().min().unwrap().0)
+    Some(seeds.into_iter().min().unwrap())
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
-    let mut sections = input.split("\n\n");
-    let seed_ranges = sections
+    let seed_ranges = input
+        .lines()
         .next()?
         .split_whitespace()
         .filter_map(|s| s.parse::<u64>().ok())
         .collect::<Vec<_>>();
     let mut seeds = seed_ranges
-        .par_chunks(2)
+        .chunks(2)
         .flat_map(|c| {
             let start = c[0];
             let length = c[1];
-            (0..length).map(|i| Seed(start + i)).collect::<Vec<Seed>>()
+            (0..length).map(|i| start + i).collect::<Vec<u64>>()
         })
         .collect::<Vec<_>>();
 
-    let map_sections: Vec<Vec<CategoryMap>> =
-        sections.map(|section| to_category_map(section)).collect();
+    let map_sections: Vec<Vec<CategoryMap>> = input
+        .split("\n\n")
+        .skip(1)
+        .map(|section| to_category_map(section))
+        .collect();
 
     for map in map_sections {
-        for seed in seeds.iter_mut() {
-            seed.advance(&map);
-        }
+        seeds.iter_mut().for_each(|seed| advance_seed(seed, &map));
     }
 
-    Some(seeds.into_par_iter().min().unwrap().0)
+    Some(seeds.into_iter().min().unwrap())
 }
 
 #[cfg(test)]
@@ -100,15 +94,15 @@ mod tests {
     #[case(55, [52,50,48], 57)]
     #[case(13, [52,50,48], 13)]
     fn test_advance(#[case] seed: u64, #[case] map: [u64; 3], #[case] expected: u64) {
-        let mut seed = Seed(seed);
         let map = vec![CategoryMap {
             dest_start: map[0],
             source_start: map[1],
             length: map[2],
         }];
-        seed.advance(&map);
+        let mut seed = seed;
+        advance_seed(&mut seed, &map);
 
-        assert_eq!(expected, seed.0);
+        assert_eq!(expected, seed);
     }
 
     #[test]
