@@ -1,5 +1,7 @@
 use std::ops::Range;
 
+use rayon::prelude::*;
+
 advent_of_code::solution!(5);
 
 #[derive(Debug)]
@@ -74,8 +76,8 @@ pub fn part_two(input: &str) -> Option<u64> {
     let categories: Vec<CategoryMaps> = input.split("\n\n").skip(1).map(to_category_maps).collect();
 
     let min = seed_ranges
-        .into_iter()
-        .flat_map(|r| r.clone())
+        .into_par_iter()
+        .flat_map(|r| r)
         .map(|seed| {
             categories
                 .iter()
