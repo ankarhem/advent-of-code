@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use rayon::prelude::*;
 
 advent_of_code::solution!(6);
 
@@ -57,6 +58,7 @@ pub fn part_two(input: &str) -> Option<u64> {
     let record_distance = lines[1].parse::<u64>().unwrap();
 
     let count = (0..duration)
+        .into_par_iter()
         .map(move |charge_time| distance(&charge_time, &duration))
         .filter(move |d| *d > record_distance)
         .count();
