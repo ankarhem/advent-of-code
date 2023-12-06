@@ -4,7 +4,7 @@ advent_of_code::solution!(6);
 
 fn distance(charge_time: &u64, duration: &u64) -> u64 {
     let speed = charge_time; // 1mm/ms
-    return speed * (duration - charge_time);
+    speed * (duration - charge_time)
 }
 
 #[derive(Debug)]
@@ -39,7 +39,7 @@ pub fn part_one(input: &str) -> Option<u64> {
                 .filter(move |d| *d > game.record_distance)
                 .count()
         })
-        .fold(1, |acc, x| acc * x);
+        .product::<usize>();
 
     Some(margin_of_err as u64)
 }
