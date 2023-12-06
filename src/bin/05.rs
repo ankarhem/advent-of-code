@@ -7,7 +7,7 @@ struct Seed(u64);
 fn advance_seed(seed: &mut u64, maps: &Vec<CategoryMap>) {
     let map = maps
         .iter()
-        .find(|m| return *seed >= m.source_start && *seed < m.source_start + m.length);
+        .find(|m| *seed >= m.source_start && *seed < m.source_start + m.length);
 
     if let Some(map) = map {
         let diff: i64 = *seed as i64 - map.source_start as i64;
@@ -43,8 +43,7 @@ pub fn part_one(input: &str) -> Option<u64> {
         .filter_map(|s| s.parse::<u64>().ok())
         .collect::<Vec<_>>();
 
-    let map_sections: Vec<Vec<CategoryMap>> =
-        sections.map(|section| to_category_map(section)).collect();
+    let map_sections: Vec<Vec<CategoryMap>> = sections.map(to_category_map).collect();
 
     for map in map_sections {
         seeds.iter_mut().for_each(|seed| advance_seed(seed, &map));
@@ -69,11 +68,8 @@ pub fn part_two(input: &str) -> Option<u64> {
         })
         .collect::<Vec<_>>();
 
-    let map_sections: Vec<Vec<CategoryMap>> = input
-        .split("\n\n")
-        .skip(1)
-        .map(|section| to_category_map(section))
-        .collect();
+    let map_sections: Vec<Vec<CategoryMap>> =
+        input.split("\n\n").skip(1).map(to_category_map).collect();
 
     for map in map_sections {
         seeds.iter_mut().for_each(|seed| advance_seed(seed, &map));
