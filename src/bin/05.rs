@@ -1,10 +1,7 @@
 #![feature(iter_map_windows)]
 advent_of_code::solution!(5);
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-struct Seed(u64);
-
-fn advance_seed(seed: &mut u64, maps: &Vec<CategoryMap>) {
+fn advance_seed(seed: &mut u64, maps: &[CategoryMap]) {
     let map = maps
         .iter()
         .find(|m| *seed >= m.source_start && *seed < m.source_start + m.length);
