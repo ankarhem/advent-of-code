@@ -15,16 +15,11 @@ struct Game {
 }
 
 pub fn part_one(input: &str) -> Option<u64> {
-    let mut lines = input.lines().filter(|l| !l.is_empty());
-    let times = lines
-        .next()?
-        .split_whitespace()
-        .filter_map(|s| s.parse::<u64>().ok());
-
-    let distances = lines
-        .next()?
-        .split_whitespace()
-        .filter_map(|s| s.parse::<u64>().ok());
+    let mut lines = input
+        .lines()
+        .filter(|l| !l.is_empty())
+        .map(|l| l.split_whitespace().filter_map(|s| s.parse::<u64>().ok()));
+    let (times, distances) = lines.next_tuple()?;
 
     let games = times.zip(distances).map(|(time, distance)| Game {
         duration: time,
@@ -44,16 +39,11 @@ pub fn part_one(input: &str) -> Option<u64> {
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
-    let lines = input
-        .lines()
-        .filter(|l| !l.is_empty())
-        .map(|l| {
-            let mut numbers = l.split_whitespace().filter_map(|s| s.parse::<u32>().ok());
-            Itertools::join(&mut numbers, "")
-        })
-        .collect::<Vec<String>>();
-    let duration = lines[0].parse::<u64>().unwrap();
-    let record_distance = lines[1].parse::<u64>().unwrap();
+    let mut lines = input.lines().filter(|l| !l.is_empty()).map(|l| {
+        let mut numbers = l.split_whitespace().filter_map(|s| s.parse::<u32>().ok());
+        Itertools::join(&mut numbers, "").parse::<u64>().unwrap()
+    });
+    let (duration, record_distance) = lines.next_tuple()?;
 
     let count = (0..duration)
         .into_par_iter()
