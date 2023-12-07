@@ -17,6 +17,7 @@ doctest = false
 test_lib = []
 
 [dependencies]
+anyhow = "1.0.75"
 cond = "1.0.5"
 indicatif = { version = "0.17.7", features = ["rayon"] }
 itertools = "0.12.0"
