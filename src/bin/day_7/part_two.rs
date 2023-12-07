@@ -62,7 +62,7 @@ struct Hand {
 }
 
 impl Hand {
-    fn hand_type<'a>(&'a self) -> HandType<'a> {
+    fn hand_type(&self) -> HandType<'_> {
         let mut counts = std::collections::HashMap::new();
 
         let cards_without_jokers = self

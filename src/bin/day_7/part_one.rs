@@ -62,7 +62,7 @@ struct Hand {
 }
 
 impl Hand {
-    fn hand_type<'a>(&'a self) -> HandType<'a> {
+    fn hand_type(&self) -> HandType<'_> {
         let mut counts = std::collections::HashMap::new();
         for card in &self.cards {
             *counts.entry(card).or_insert(0) += 1;
