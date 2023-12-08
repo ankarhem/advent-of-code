@@ -5,7 +5,7 @@ use winnow::ascii::alphanumeric1;
 use winnow::combinator::{delimited, separated_pair};
 use winnow::prelude::*;
 use winnow::token::take_until1;
-use winnow::{ascii::alpha1, PResult};
+use winnow::PResult;
 
 #[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 struct Node<'a>(&'a str);
@@ -115,16 +115,11 @@ pub fn part_two(input: &str) -> Option<u64> {
         .map(|node| network.calculate_distance(node, &directions, |n| n.0.ends_with("Z")))
         .collect::<Option<Vec<_>>>()?;
 
-    // filter out values n that exist in the list as k * n where k > 1
-    let filtered_distances = node_distances
+    let steps = node_distances
         .iter()
-        .filter(|&&n| !node_distances.iter().any(|&m| n != m && n % m == 0))
-        .cloned()
-        .collect::<Vec<_>>();
+        .fold(1, |acc, &x| num::integer::lcm(acc, x));
 
-    dbg!(filtered_distances);
-    // let min_distance = filtered_distances.iter().product();
-    Some(0)
+    Some(steps)
 }
 
 #[cfg(test)]
@@ -167,6 +162,17 @@ ZZZ = (ZZZ, ZZZ)";
         let result = part_one(example);
         assert_eq!(6, result.unwrap());
     }
+
+    // Part Two
+
+    // #[rstest]
+    // #[case(12, vec![2, 2, 3])]
+    // #[case(24, vec![2, 2, 2, 3])]
+    // #[case(30, vec![2, 3, 5])]
+    // fn test_factorize(#[case] input: u64, #[case] expected: Vec<u64>) {
+    //     let result = factorize(input);
+    //     assert_eq!(expected, result);
+    // }
 
     #[test]
     fn test_part_two_example() {
