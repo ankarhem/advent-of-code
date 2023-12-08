@@ -163,17 +163,6 @@ ZZZ = (ZZZ, ZZZ)";
         assert_eq!(6, result.unwrap());
     }
 
-    // Part Two
-
-    // #[rstest]
-    // #[case(12, vec![2, 2, 3])]
-    // #[case(24, vec![2, 2, 2, 3])]
-    // #[case(30, vec![2, 3, 5])]
-    // fn test_factorize(#[case] input: u64, #[case] expected: Vec<u64>) {
-    //     let result = factorize(input);
-    //     assert_eq!(expected, result);
-    // }
-
     #[test]
     fn test_part_two_example() {
         let example = r"LR
@@ -185,24 +174,6 @@ ZZZ = (ZZZ, ZZZ)";
 22B = (22C, 22C)
 22C = (22Z, 22Z)
 22Z = (22B, 22B)
-XXX = (XXX, XXX)";
-        let result = part_two(example);
-        assert_eq!(6, result.unwrap());
-    }
-
-    #[test]
-    fn test_part_two_custom_example() {
-        let example = r"LR
-
-11A = (11B, XXX)
-11B = (XXX, 11Z)
-11Z = (11B, XXX)
-
-22A = (22B, XXX)
-22B = (22C, 22C)
-22C = (22Z, 22Z)
-22Z = (22B, 22B)
-
 XXX = (XXX, XXX)";
         let result = part_two(example);
         assert_eq!(6, result.unwrap());
