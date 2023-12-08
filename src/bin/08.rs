@@ -29,7 +29,7 @@ impl Network<'_> {
         let mut steps = 0;
         let mut current_node = start;
 
-        while let Some((left, right)) = self.nodes.get(&current_node) {
+        while let Some((left, right)) = self.nodes.get(current_node) {
             // if steps > 0 && current_node == start {
             //     return None; // Cannot reach target node
             // }
@@ -112,7 +112,7 @@ pub fn part_two(input: &str) -> Option<u64> {
 
     let node_distances = starting_nodes
         .iter()
-        .map(|node| network.calculate_distance(node, &directions, |n| n.0.ends_with("Z")))
+        .map(|node| network.calculate_distance(node, &directions, |n| n.0.ends_with('Z')))
         .collect::<Option<Vec<_>>>()?;
 
     let steps = node_distances
