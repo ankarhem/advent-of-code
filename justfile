@@ -8,12 +8,12 @@ solve day year=default_year:
 bench day year=default_year:
     cargo solve {{year}} {{day}} --release --time
 
-just download day year=default_year:
+download day year=default_year:
     cargo download {{year}} {{day}}
 
 init day year=default_year:
     cargo scaffold {{year}} {{day}}
-    just download {{day}} {{year}}
+    cargo download {{year}} {{day}}
 
 fix:
     cargo clippy --fix -- -D warnings
