@@ -14,3 +14,7 @@ just download day year=default_year:
 init day year=default_year:
     cargo scaffold {{year}} {{day}}
     just download {{day}} {{year}}
+
+fix:
+    cargo clippy --fix -- -D warnings
+    cargo fmt
