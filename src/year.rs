@@ -5,7 +5,7 @@ pub struct Year(u16);
 
 impl Year {
     pub fn new(year: u16) -> Option<Self> {
-        if year < 2015 || year > 2023 {
+        if !(2015..=2023).contains(&year) {
             return None;
         }
         Some(Self(year))
