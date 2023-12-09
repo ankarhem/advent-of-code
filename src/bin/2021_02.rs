@@ -31,16 +31,25 @@ pub fn part_one(input: &str) -> Option<u32> {
 
     let (position, depth): (u32, u32) =
         instructions.fold((0, 0), |(position, depth), command| match command {
-            Instruction::Forward(number) => (position + number as u32, depth),
             Instruction::Down(number) => (position, depth + number as u32),
             Instruction::Up(number) => (position, depth - number as u32),
+            Instruction::Forward(number) => (position + number as u32, depth),
         });
 
     Some(position * depth)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    let instructions = parse_input(input);
+    let (position, depth, _): (u32, u32, u32) =
+        instructions.fold((0, 0, 0), |(position, depth, aim), command| match command {
+            Instruction::Down(number) => (position, depth, aim + number as u32),
+            Instruction::Up(number) => (position, depth, aim - number as u32),
+            Instruction::Forward(number) => {
+                (position + number as u32, depth + (aim * number as u32), aim)
+            }
+        });
+    Some(position * depth)
 }
 
 #[cfg(test)]
@@ -56,6 +65,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", YEAR, DAY));
-        assert_eq!(None, result);
+        assert_eq!(900, result.unwrap());
     }
 }
