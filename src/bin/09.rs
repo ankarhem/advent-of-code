@@ -1,15 +1,21 @@
 use winnow::ascii::line_ending;
 use winnow::prelude::*;
 use winnow::{
-    ascii::{digit1, space1},
-    combinator::{repeat, separated},
-    IResult, PResult,
+    ascii::{dec_int, digit1, space1},
+    combinator::{opt, separated},
+    PResult,
 };
 
 advent_of_code::solution!(9);
 
+fn digit_parser(input: &mut &str) -> PResult<i64> {
+    dec_int.parse_next(input)
+}
+
 fn line_parser(input: &mut &str) -> PResult<Vec<i64>> {
-    separated(0.., digit1.parse_to::<i64>(), space1).parse_next(input)
+    separated(0.., digit_parser, space1)
+        .map(|s| s)
+        .parse_next(input)
 }
 
 fn input_parser(input: &mut &str) -> PResult<Vec<Vec<i64>>> {
@@ -36,11 +42,16 @@ fn next_number(vec: &[i64]) -> i64 {
 }
 
 pub fn part_one(input: &str) -> Option<i64> {
-    let input = input_parser.parse(input).unwrap();
-    todo!()
+    let input = input_parser
+        .parse(input)
+        .map_err(|e| e.to_string())
+        .unwrap();
+    let sum = input.iter().map(|v| next_number(v)).sum();
+
+    Some(sum)
 }
 
-pub fn part_two(input: &str) -> Option<i64> {
+pub fn part_two(_input: &str) -> Option<i64> {
     None
 }
 
@@ -54,6 +65,7 @@ mod tests {
     #[case("0 3 6 9 12 15", vec![0, 3, 6, 9, 12, 15])]
     #[case("1 3 6 10 15 21", vec![1, 3, 6, 10, 15, 21])]
     #[case("10 13 16 21 30 45", vec![10, 13, 16, 21, 30, 45])]
+    #[case("-10 2 -4", vec![-10, 2, -4])]
     fn test_line_parser(#[case] mut input: &str, #[case] expected: Vec<i64>) {
         let result = line_parser.parse_next(&mut input);
         assert_eq!(expected, result.unwrap());
@@ -103,7 +115,7 @@ mod tests {
     #[test]
     fn test_part_one() {
         let result = part_one(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(114, result.unwrap());
     }
 
     #[test]
