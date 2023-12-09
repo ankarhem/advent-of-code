@@ -1,8 +1,8 @@
 use crate::template::aoc_cli;
-use crate::Day;
+use crate::{Day, Year};
 use std::process;
 
-pub fn handle(day: Day) {
+pub fn handle(year: Year, day: Day) {
     if aoc_cli::check().is_err() {
         eprintln!("command \"aoc\" not found or not callable. Try running \"cargo install aoc-cli\" to install it.");
         process::exit(1);
