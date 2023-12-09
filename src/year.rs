@@ -25,7 +25,7 @@ impl Year {
 
 impl Display for Year {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:02}", self.0)
+        write!(f, "{:04}", self.0)
     }
 }
 
