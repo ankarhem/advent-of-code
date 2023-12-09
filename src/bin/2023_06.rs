@@ -1,7 +1,7 @@
 use itertools::Itertools;
 use rayon::prelude::*;
 
-advent_of_code::solution!(6);
+advent_of_code::solution!(2023, 6);
 
 fn distance(charge_time: &u64, duration: &u64) -> u64 {
     let speed = charge_time; // 1mm/ms
@@ -60,13 +60,13 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let result = part_one(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_one(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(288, result.unwrap());
     }
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_two(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(71503, result.unwrap());
     }
 }

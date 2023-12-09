@@ -53,7 +53,7 @@ impl Network<'_> {
     }
 }
 
-advent_of_code::solution!(8);
+advent_of_code::solution!(2023, 8);
 
 fn parse_line<'a>(input: &mut &'a str) -> PResult<(Node<'a>, Node<'a>, Node<'a>)> {
     let id = alphanumeric1.parse_next(input)?;

@@ -3,7 +3,6 @@ use itertools::Itertools;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Copy, Clone)]
 enum Card {
-    J,
     Two,
     Three,
     Four,
@@ -13,6 +12,7 @@ enum Card {
     Eight,
     Nine,
     T,
+    J,
     Q,
     K,
     A,
@@ -23,7 +23,6 @@ impl std::str::FromStr for Card {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let card = match s {
-            "J" => Card::J,
             "2" => Card::Two,
             "3" => Card::Three,
             "4" => Card::Four,
@@ -33,6 +32,7 @@ impl std::str::FromStr for Card {
             "8" => Card::Eight,
             "9" => Card::Nine,
             "T" => Card::T,
+            "J" => Card::J,
             "Q" => Card::Q,
             "K" => Card::K,
             "A" => Card::A,
@@ -64,29 +64,15 @@ struct Hand {
 impl Hand {
     fn hand_type(&self) -> HandType<'_> {
         let mut counts = std::collections::HashMap::new();
-
-        let cards_without_jokers = self
-            .cards
-            .iter()
-            .filter(|card| **card != Card::J)
-            .collect::<Vec<_>>();
-        let num_jokers = 5 - cards_without_jokers.len();
-
-        for card in cards_without_jokers {
+        for card in &self.cards {
             *counts.entry(card).or_insert(0) += 1;
         }
 
         let mut counts = counts.into_iter().collect::<Vec<_>>();
-        counts.sort_by(|(card_a, count_a), (card_b, count_b)| {
-            count_b.cmp(count_a).then(card_a.cmp(card_b))
-        });
-
-        if num_jokers == 5 {
-            return HandType::FiveOfAKind(&Card::A);
-        }
+        counts.sort_by(|(_, count_a), (_, count_b)| count_b.cmp(count_a));
 
         let (card, count) = counts[0];
-        match count + num_jokers {
+        match count {
             5 => HandType::FiveOfAKind(card),
             4 => HandType::FourOfAKind(card),
             3 => {
@@ -167,7 +153,7 @@ impl std::str::FromStr for Hand {
     }
 }
 
-pub fn part_two(input: &str) -> Option<u32> {
+pub fn part_one(input: &str) -> Option<u32> {
     let mut lines = input
         .lines()
         .filter(|l| !l.is_empty())
@@ -197,8 +183,6 @@ pub fn part_two(input: &str) -> Option<u32> {
         }
     });
 
-    dbg!(&lines);
-
     let total_winnings = lines.iter().enumerate().fold(0, |acc, (index, hand)| {
         let rank = index + 1;
         let winnings = hand.bid.0 * rank as u32;
@@ -210,12 +194,12 @@ pub fn part_two(input: &str) -> Option<u32> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::super::DAY;
+    use super::super::super::{DAY, YEAR};
     use super::*;
 
     #[test]
-    fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(5905, result.unwrap());
+    fn test_part_one() {
+        let result = part_one(&advent_of_code::template::read_file("examples", YEAR, DAY));
+        assert_eq!(6440, result.unwrap());
     }
 }

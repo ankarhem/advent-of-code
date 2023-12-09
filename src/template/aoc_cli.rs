@@ -4,7 +4,7 @@ use std::{
     process::{Command, Output, Stdio},
 };
 
-use crate::Day;
+use crate::{Day, Year};
 
 #[derive(Debug)]
 pub enum AocCommandError {
@@ -35,8 +35,8 @@ pub fn check() -> Result<(), AocCommandError> {
     Ok(())
 }
 
-pub fn read(day: Day) -> Result<Output, AocCommandError> {
-    let puzzle_path = get_puzzle_path(day);
+pub fn read(year: Year, day: Day) -> Result<Output, AocCommandError> {
+    let puzzle_path = get_puzzle_path(year, day);
 
     let args = build_args(
         "read",
@@ -45,15 +45,16 @@ pub fn read(day: Day) -> Result<Output, AocCommandError> {
             "--puzzle-file".into(),
             puzzle_path,
         ],
+        year,
         day,
     );
 
     call_aoc_cli(&args)
 }
 
-pub fn download(day: Day) -> Result<Output, AocCommandError> {
-    let input_path = get_input_path(day);
-    let puzzle_path = get_puzzle_path(day);
+pub fn download(year: Year, day: Day) -> Result<Output, AocCommandError> {
+    let input_path = get_input_path(year, day);
+    let puzzle_path = get_puzzle_path(year, day);
 
     let args = build_args(
         "download",
@@ -64,6 +65,7 @@ pub fn download(day: Day) -> Result<Output, AocCommandError> {
             "--puzzle-file".into(),
             puzzle_path.to_string(),
         ],
+        year,
         day,
     );
 
@@ -74,38 +76,44 @@ pub fn download(day: Day) -> Result<Output, AocCommandError> {
     Ok(output)
 }
 
-pub fn submit(day: Day, part: u8, result: &str) -> Result<Output, AocCommandError> {
+pub fn submit(year: Year, day: Day, part: u8, result: &str) -> Result<Output, AocCommandError> {
     // workaround: the argument order is inverted for submit.
-    let mut args = build_args("submit", &[], day);
+    let mut args = build_args("submit", &[], year, day);
     args.push(part.to_string());
     args.push(result.to_string());
     call_aoc_cli(&args)
 }
 
-fn get_input_path(day: Day) -> String {
-    format!("data/inputs/{day}.txt")
+fn get_input_path(year: Year, day: Day) -> String {
+    format!("data/inputs/{year}_{day}.txt")
 }
 
-fn get_puzzle_path(day: Day) -> String {
-    format!("data/puzzles/{day}.md")
+fn get_puzzle_path(year: Year, day: Day) -> String {
+    format!("data/puzzles/{year}_{day}.md")
 }
 
-fn get_year() -> Option<u16> {
-    match std::env::var("AOC_YEAR") {
-        Ok(x) => x.parse().ok().or(None),
-        Err(_) => None,
-    }
-}
+// fn get_year() -> Option<u16> {
+//     match std::env::var("AOC_YEAR") {
+//         Ok(x) => x.parse().ok().or(None),
+//         Err(_) => None,
+//     }
+// }
 
-fn build_args(command: &str, args: &[String], day: Day) -> Vec<String> {
+fn build_args(command: &str, args: &[String], year: Year, day: Day) -> Vec<String> {
     let mut cmd_args = args.to_vec();
 
-    if let Some(year) = get_year() {
-        cmd_args.push("--year".into());
-        cmd_args.push(year.to_string());
-    }
+    // if let Some(year) = get_year() {
+    //     cmd_args.push("--year".into());
+    //     cmd_args.push(year.to_string());
+    // }
 
-    cmd_args.append(&mut vec!["--day".into(), day.to_string(), command.into()]);
+    cmd_args.append(&mut vec![
+        "--year".into(),
+        year.to_string(),
+        "--day".into(),
+        day.to_string(),
+        command.into(),
+    ]);
 
     cmd_args
 }

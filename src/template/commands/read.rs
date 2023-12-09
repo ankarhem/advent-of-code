@@ -1,15 +1,15 @@
 use std::process;
 
 use crate::template::aoc_cli;
-use crate::Day;
+use crate::{Day, Year};
 
-pub fn handle(day: Day) {
+pub fn handle(year: Year, day: Day) {
     if aoc_cli::check().is_err() {
         eprintln!("command \"aoc\" not found or not callable. Try running \"cargo install aoc-cli\" to install it.");
         process::exit(1);
     }
 
-    if let Err(e) = aoc_cli::read(day) {
+    if let Err(e) = aoc_cli::read(year, day) {
         eprintln!("failed to call aoc-cli: {e}");
         process::exit(1);
     };
