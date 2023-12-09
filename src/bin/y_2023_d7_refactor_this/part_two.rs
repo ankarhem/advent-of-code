@@ -197,8 +197,6 @@ pub fn part_two(input: &str) -> Option<u32> {
         }
     });
 
-    dbg!(&lines);
-
     let total_winnings = lines.iter().enumerate().fold(0, |acc, (index, hand)| {
         let rank = index + 1;
         let winnings = hand.bid.0 * rank as u32;
