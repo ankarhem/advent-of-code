@@ -1,3 +1,4 @@
+use rayon::prelude::*;
 use winnow::ascii::line_ending;
 use winnow::prelude::*;
 use winnow::{
@@ -49,7 +50,7 @@ pub fn part_one(input: &str) -> Option<i64> {
         .parse(input)
         .map_err(|e| e.to_string())
         .unwrap();
-    let sum = input.iter().map(|v| next_number(v)).sum();
+    let sum = input.par_iter().map(|v| next_number(v)).sum();
 
     Some(sum)
 }
@@ -71,7 +72,7 @@ pub fn part_two(input: &str) -> Option<i64> {
         .parse(input)
         .map_err(|e| e.to_string())
         .unwrap();
-    let sum = input.iter().map(|v| previous_number(v)).sum();
+    let sum = input.par_iter().map(|v| previous_number(v)).sum();
 
     Some(sum)
 }
@@ -150,6 +151,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(2, result.unwrap());
     }
 }
