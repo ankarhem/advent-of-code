@@ -22,7 +22,7 @@ impl Network<'_> {
         }
     }
 
-    fn calculate_distance<F>(&self, start: &Node, directions: &Vec<char>, cond: F) -> Option<u64>
+    fn calculate_distance<F>(&self, start: &Node, directions: &[char], cond: F) -> Option<u64>
     where
         F: Fn(&Node) -> bool,
     {
