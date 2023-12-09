@@ -1,8 +1,8 @@
 use winnow::ascii::line_ending;
 use winnow::prelude::*;
 use winnow::{
-    ascii::{dec_int, digit1, space1},
-    combinator::{opt, separated},
+    ascii::{dec_int, space1},
+    combinator::separated,
     PResult,
 };
 
