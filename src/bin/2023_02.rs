@@ -1,4 +1,4 @@
-advent_of_code::solution!(2);
+advent_of_code::solution!(2023, 2);
 
 use lazy_static::lazy_static;
 use regex::Regex;
@@ -115,7 +115,7 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let result = part_one(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_one(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(8, result.unwrap());
     }
 
@@ -139,7 +139,7 @@ mod tests {
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_two(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(2286, result.unwrap());
     }
 }

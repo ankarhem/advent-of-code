@@ -1,5 +1,5 @@
 #![feature(iter_map_windows)]
-advent_of_code::solution!(3);
+advent_of_code::solution!(2023, 3);
 
 fn has_symbols(input: &str) -> bool {
     !input
@@ -168,7 +168,7 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let result = part_one(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_one(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(4361, result.unwrap());
     }
 
@@ -184,7 +184,7 @@ mod tests {
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_two(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(467835, result.unwrap());
     }
 }

@@ -8,7 +8,7 @@ pub fn handle(year: Year, day: Day) {
         process::exit(1);
     }
 
-    if let Err(e) = aoc_cli::download(day) {
+    if let Err(e) = aoc_cli::download(year, day) {
         eprintln!("failed to call aoc-cli: {e}");
         process::exit(1);
     };

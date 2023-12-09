@@ -1,6 +1,6 @@
 /// Encapsulates code that interacts with solution functions.
 use crate::template::{aoc_cli, ANSI_ITALIC, ANSI_RESET};
-use crate::Day;
+use crate::{Day, Year};
 use std::fmt::Display;
 use std::io::{stdout, Write};
 use std::process::Output;
@@ -9,7 +9,13 @@ use std::{cmp, env, process};
 
 use super::ANSI_BOLD;
 
-pub fn run_part<I: Clone, T: Display>(func: impl Fn(I) -> Option<T>, input: I, day: Day, part: u8) {
+pub fn run_part<I: Clone, T: Display>(
+    func: impl Fn(I) -> Option<T>,
+    input: I,
+    year: Year,
+    day: Day,
+    part: u8,
+) {
     let part_str = format!("Part {part}");
 
     let (result, duration, samples) =
@@ -18,7 +24,7 @@ pub fn run_part<I: Clone, T: Display>(func: impl Fn(I) -> Option<T>, input: I, d
     print_result(&result, &part_str, &format_duration(&duration, samples));
 
     if let Some(result) = result {
-        submit_result(result, day, part);
+        submit_result(result, year, day, part);
     }
 }
 
@@ -132,6 +138,7 @@ fn print_result<T: Display>(result: &Option<T>, part: &str, duration_str: &str) 
 ///  2. aoc-cli is installed.
 fn submit_result<T: Display>(
     result: T,
+    year: Year,
     day: Day,
     part: u8,
 ) -> Option<Result<Output, aoc_cli::AocCommandError>> {
@@ -163,5 +170,5 @@ fn submit_result<T: Display>(
     }
 
     println!("Submitting result via aoc-cli...");
-    Some(aoc_cli::submit(day, part, &result.to_string()))
+    Some(aoc_cli::submit(year, day, part, &result.to_string()))
 }

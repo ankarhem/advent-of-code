@@ -87,7 +87,7 @@ fn main() {
         Ok(args) => match args {
             AppArguments::All { release, time } => all::handle(release, time),
             AppArguments::Download { year, day } => download::handle(year, day),
-            AppArguments::Read { year, day } => read::handle(day),
+            AppArguments::Read { year, day } => read::handle(year, day),
             AppArguments::Scaffold { year, day } => scaffold::handle(year, day),
             AppArguments::Solve {
                 year,
@@ -95,7 +95,7 @@ fn main() {
                 release,
                 time,
                 submit,
-            } => solve::handle(day, release, time, submit),
+            } => solve::handle(year, day, release, time, submit),
         },
     };
 }

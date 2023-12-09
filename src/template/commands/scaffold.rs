@@ -6,7 +6,7 @@ use std::{
 
 use crate::{Day, Year};
 
-const MODULE_TEMPLATE: &str = r#"advent_of_code::solution!(DAY_NUMBER);
+const MODULE_TEMPLATE: &str = r#"advent_of_code::solution!(YEAR_NUMBER, DAY_NUMBER);
 
 pub fn part_one(input: &str) -> Option<u32> {
     None
@@ -43,9 +43,9 @@ fn create_file(path: &str) -> Result<File, std::io::Error> {
 }
 
 pub fn handle(year: Year, day: Day) {
-    let input_path = format!("data/inputs/{year}/{day}.txt");
-    let example_path = format!("data/examples/{year}/{day}.txt");
-    let module_path = format!("src/bin/{year}/{day}.rs");
+    let input_path = format!("data/inputs/{year}_{day}.txt");
+    let example_path = format!("data/examples/{year}_{day}.txt");
+    let module_path = format!("src/bin/{year}_{day}.rs");
 
     let mut file = match safe_create_file(&module_path) {
         Ok(file) => file,
@@ -58,6 +58,7 @@ pub fn handle(year: Year, day: Day) {
     match file.write_all(
         MODULE_TEMPLATE
             .replace("DAY_NUMBER", &day.into_inner().to_string())
+            .replace("YEAR_NUMBER", &year.into_inner().to_string())
             .as_bytes(),
     ) {
         Ok(()) => {

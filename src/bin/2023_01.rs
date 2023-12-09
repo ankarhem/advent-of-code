@@ -1,4 +1,4 @@
-advent_of_code::solution!(1);
+advent_of_code::solution!(2023, 1);
 
 use cond::cond;
 

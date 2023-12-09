@@ -1,6 +1,6 @@
 use rayon::prelude::*;
 
-advent_of_code::solution!(9);
+advent_of_code::solution!(2023, 9);
 
 fn parse_input(input: &str) -> impl ParallelIterator<Item = Vec<i64>> + '_ {
     input.par_lines().filter(|l| !l.is_empty()).map(|l| {
@@ -100,13 +100,13 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let result = part_one(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_one(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(114, result.unwrap());
     }
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_two(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(2, result.unwrap());
     }
 }

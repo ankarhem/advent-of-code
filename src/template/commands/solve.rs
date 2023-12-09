@@ -1,9 +1,10 @@
 use std::process::{Command, Stdio};
 
-use crate::Day;
+use crate::{Day, Year};
 
-pub fn handle(day: Day, release: bool, time: bool, submit_part: Option<u8>) {
-    let mut cmd_args = vec!["run".to_string(), "--bin".to_string(), day.to_string()];
+pub fn handle(year: Year, day: Day, release: bool, time: bool, submit_part: Option<u8>) {
+    let binary = format!("{year}_{day}");
+    let mut cmd_args = vec!["run".to_string(), "--bin".to_string(), binary]; // day.to_string()
 
     if release {
         cmd_args.push("--release".to_string());

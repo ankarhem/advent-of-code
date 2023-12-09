@@ -210,12 +210,12 @@ pub fn part_two(input: &str) -> Option<u32> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::super::DAY;
+    use super::super::super::{DAY, YEAR};
     use super::*;
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
+        let result = part_two(&advent_of_code::template::read_file("examples", YEAR, DAY));
         assert_eq!(5905, result.unwrap());
     }
 }
