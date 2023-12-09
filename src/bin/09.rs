@@ -8,6 +8,7 @@ use winnow::{
 
 advent_of_code::solution!(9);
 
+// -- parser --
 fn digit_parser(input: &mut &str) -> PResult<i64> {
     dec_int.parse_next(input)
 }
@@ -22,6 +23,7 @@ fn input_parser(input: &mut &str) -> PResult<Vec<Vec<i64>>> {
     separated(0.., line_parser, line_ending).parse_next(input)
 }
 
+// -- utility --
 fn is_constant_difference(vec: &[i64]) -> bool {
     vec.windows(2).all(|w| w[1] - w[0] == 0)
 }
@@ -30,6 +32,7 @@ fn to_difference_vec(vec: &[i64]) -> Vec<i64> {
     vec.windows(2).map(|w| w[1] - w[0]).collect()
 }
 
+// -- part_one --
 fn next_number(vec: &[i64]) -> i64 {
     let diff = to_difference_vec(vec);
     let last = vec.last().unwrap();
@@ -51,8 +54,26 @@ pub fn part_one(input: &str) -> Option<i64> {
     Some(sum)
 }
 
-pub fn part_two(_input: &str) -> Option<i64> {
-    None
+// -- part_two --
+fn previous_number(vec: &[i64]) -> i64 {
+    let diff = to_difference_vec(vec);
+    let first = vec.first().unwrap();
+    let diff_first = diff.first().unwrap();
+    if is_constant_difference(&diff) {
+        first - diff_first
+    } else {
+        first - previous_number(&diff)
+    }
+}
+
+pub fn part_two(input: &str) -> Option<i64> {
+    let input = input_parser
+        .parse(input)
+        .map_err(|e| e.to_string())
+        .unwrap();
+    let sum = input.iter().map(|v| previous_number(v)).sum();
+
+    Some(sum)
 }
 
 #[cfg(test)]
@@ -110,6 +131,14 @@ mod tests {
     #[case(vec![10, 13, 16, 21, 30, 45], 68)]
     fn test_next_number(#[case] input: Vec<i64>, #[case] expected: i64) {
         assert_eq!(expected, next_number(&input));
+    }
+
+    #[rstest]
+    #[case(vec![3, 3, 3, 3, 3], 3)]
+    #[case(vec![0, 3, 6, 9, 12, 15], -3)]
+    #[case(vec![10, 13, 16, 21, 30, 45], 5)]
+    fn test_previous_number(#[case] input: Vec<i64>, #[case] expected: i64) {
+        assert_eq!(expected, previous_number(&input));
     }
 
     #[test]
